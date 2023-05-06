@@ -6,43 +6,11 @@
 /*   By: pvieira- <pvieira-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 12:25:31 by pvieira-          #+#    #+#             */
-/*   Updated: 2023/05/06 17:27:23 by pvieira-         ###   ########.fr       */
+/*   Updated: 2023/05/06 18:04:15 by pvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long	ft_atol(const char *nptr)
-{
-	size_t		i;
-	long		sign;
-	long		result;
-
-	result = 0;
-	sign = 1;
-	i = 0;
-	while ((nptr[i] > 8 && nptr[i] < 14) || nptr[i] == ' ')
-		i++;
-	if (nptr[i] == '-' || nptr[i] == '+')
-	{
-		if (nptr[i] == '-')
-			sign = -1;
-		i++;
-	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		result = (nptr[i] - '0') + (result * 10);
-		i++;
-	}
-	return (result * sign);
-}
-
-int	ft_isdigit(int n)
-{
-	if (n >= '0' && n <= '9')
-		return (0);
-	return (1);
-}
 
 void	print_msn(t_philo *ph, int action)
 {
@@ -63,6 +31,13 @@ static void	sleep_and_print(t_hall *hall)
 	hall->dead = 0;
 	pthread_mutex_unlock(&hall->m_last_eat);
 	usleep(7000);
+}
+
+void monitoring_philo_2(t_hall *hall, long *i)
+{
+		if (*i == hall->n_philo)
+			*i = 0;
+		usleep(100);
 }
 
 void	monitoring_philo(t_hall *hall)
@@ -91,8 +66,6 @@ void	monitoring_philo(t_hall *hall)
 		}
 		pthread_mutex_unlock(&hall->m_last_eat);
 		i++;
-		if (i == hall->n_philo)
-			i = 0;
-		usleep(100);
 	}
+	monitoring_philo_2(hall, &i);
 }
