@@ -6,7 +6,7 @@
 /*   By: pvieira- <pvieira-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 12:25:31 by pvieira-          #+#    #+#             */
-/*   Updated: 2023/05/06 18:04:15 by pvieira-         ###   ########.fr       */
+/*   Updated: 2023/05/06 23:41:25 by pvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,21 @@ static void	sleep_and_print(t_hall *hall)
 	usleep(7000);
 }
 
-void monitoring_philo_2(t_hall *hall, long *i)
+static void	monitoring_philo_2(t_hall *hall, long *i)
 {
-		if (*i == hall->n_philo)
-			*i = 0;
-		usleep(100);
+	if (*i == hall->n_philo)
+		*i = 0;
+	usleep(100);
+}
+
+static int	satisfied_philosopher(t_hall *hall)
+{
+	if (hall->dinner_number == 0)
+	{
+		pthread_mutex_unlock(&hall->m_last_eat);
+		return (0);
+	}
+	return (1);
 }
 
 void	monitoring_philo(t_hall *hall)
@@ -58,11 +68,8 @@ void	monitoring_philo(t_hall *hall)
 		{
 			hall->ph[i].my_dinner_number--;
 			hall->dinner_number--;
-			if (hall->dinner_number == 0)
-			{
-				pthread_mutex_unlock(&hall->m_last_eat);
+			if (satisfied_philosopher(hall) == 0)
 				break ;
-			}
 		}
 		pthread_mutex_unlock(&hall->m_last_eat);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: pvieira- <pvieira-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 11:52:47 by pvieira-          #+#    #+#             */
-/*   Updated: 2023/05/06 16:50:26 by pvieira-         ###   ########.fr       */
+/*   Updated: 2023/05/06 23:45:46 by pvieira-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ static void	smart_sleep(long duration, t_philo *ph)
 	long	start_time;
 
 	start_time = current_time(ph->hl);
+	printf("C\n");
 	while (start_time + duration >= current_time(ph->hl))
 	{
 		pthread_mutex_lock(&ph->hl->m_last_eat);
 		if (ph->hl->dead == 0)
 		{
+		printf("D\n");
 			pthread_mutex_unlock(&ph->hl->m_last_eat);
 			break ;
 		}
@@ -40,7 +42,9 @@ void	take_fork(t_philo *ph)
 
 void	eating(t_philo *ph)
 {
+	printf("A\n");
 	print_msn(ph, v_eating);
+	printf("B\n");
 	smart_sleep(ph->hl->time_to_eat, ph);
 	pthread_mutex_lock(&ph->hl->m_last_eat);
 	ph->last_eat = current_time(ph->hl);
